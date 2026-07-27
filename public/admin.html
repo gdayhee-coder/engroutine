@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>잉글루틴 선생님 페이지</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans KR',sans-serif;background:#FBFCF7;padding:16px;color:#4A5544}
+.wrap{max-width:800px;margin:0 auto}
+.hdr{background:linear-gradient(160deg,#C7D8B4,#A9BE92);border-radius:14px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.hdr .logo{width:36px;height:36px;border-radius:10px;background:#7E9469;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:19px}
+.hdr h1{font-size:17px;font-weight:900;color:#455239}
+.hdr p{font-size:11px;color:rgba(69,82,57,0.7)}
+.login{background:#fff;border:1.5px solid #E6EBDC;border-radius:14px;padding:24px;text-align:center;max-width:340px;margin:40px auto}
+.login h2{font-size:15px;font-weight:800;margin-bottom:14px}
+.login input{width:100%;padding:12px;border:2px solid #7E9469;border-radius:10px;font-size:15px;text-align:center;margin-bottom:10px;font-family:inherit;outline:none}
+.login button{width:100%;padding:12px;background:#7E9469;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit}
+.tabs{display:flex;gap:6px;margin-bottom:16px}
+.tab{flex:1;padding:11px;background:#fff;border:1.5px solid #E6EBDC;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;color:#7A8770}
+.tab.on{background:#7E9469;color:#fff;border-color:#7E9469}
+.card{background:#fff;border:1.5px solid #E6EBDC;border-radius:14px;padding:16px;margin-bottom:14px}
+.card h3{font-size:14px;font-weight:800;margin-bottom:12px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row input{flex:1;min-width:100px;padding:10px 12px;border:1.5px solid #E6EBDC;border-radius:9px;font-size:13px;font-family:inherit;outline:none}
+.row input.sm{flex:0 0 90px;text-align:center}
+.btn{padding:10px 16px;background:#7E9469;color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;white-space:nowrap}
+.btn.gray{background:#fff;color:#7E9469;border:1.5px solid #7E9469}
+.notice{margin-top:12px;background:#EDF2E4;border:1px solid #A9BE92;border-radius:10px;padding:12px 14px;display:none}
+.notice.show{display:block}
+.notice b{color:#5E7049}
+.err{color:#C47B72;font-size:12px;margin-top:8px}
+.slist{display:grid;gap:8px;margin-top:6px}
+.srow{background:#fff;border:1px solid #E6EBDC;border-radius:10px;padding:11px 13px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sname{font-weight:700;font-size:13.5px}
+.sid{font-size:10.5px;color:#A7B29C}
+.mini{font-size:11px;padding:3px 9px;border-radius:8px;font-weight:700}
+.mini.hw{background:#EDF2E4;color:#5E7049}
+.mini.wd{background:#F5F0E0;color:#B08842}
+.statmini{font-size:11px;color:#5E7049;font-weight:700;background:#EDF2E4;padding:4px 10px;border-radius:8px}
+.act{margin-left:auto;display:flex;gap:6px}
+.act button{font-size:11px;padding:5px 10px;border-radius:7px;border:1px solid #E6EBDC;background:#fff;cursor:pointer;font-family:inherit;color:#7A8770}
+.act button.del{color:#C99F86;border-color:#EAD5CC}
+.booklist{display:grid;gap:8px;margin-bottom:12px}
+.bookrow{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #E6EBDC;border-left:5px solid #9DB088;border-radius:9px;padding:10px 13px}
+.bookrow .bn{font-weight:700;font-size:13px}
+.bookrow .bd{font-size:10.5px;color:#A7B29C}
+.bookrow button{margin-left:auto;background:none;border:none;color:#C99F86;font-size:15px;cursor:pointer}
+.modal{position:fixed;inset:0;background:rgba(37,43,35,0.6);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+.modal.show{display:flex}
+.modal-box{background:#fff;border-radius:16px;padding:22px;max-width:400px;width:100%}
+.modal-box h3{font-size:15px;font-weight:800;margin-bottom:4px}
+.modal-box .msub{font-size:12px;color:#A7B29C;margin-bottom:14px}
+.modal-box label{font-size:11.5px;font-weight:700;color:#7A8770;display:block;margin:10px 0 4px}
+.modal-box input{width:100%;padding:10px 12px;border:1.5px solid #E6EBDC;border-radius:9px;font-size:13px;font-family:inherit;outline:none}
+.modal-btns{display:flex;gap:8px;margin-top:16px}
+.modal-btns button{flex:1;padding:11px;border-radius:9px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;border:none}
+.modal-btns .cancel{background:#F0F2EA;color:#7A8770}
+.modal-btns .save{background:#7E9469;color:#fff}
+.chk-row{display:flex;gap:8px;margin-top:4px}
+.chk{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;font-size:12px;font-weight:700;color:#5E7049;background:#F0F4EA;border:1.5px solid #E6EBDC;border-radius:9px;padding:9px 4px;cursor:pointer}
+.chk input{width:15px;height:15px;accent-color:#7E9469}
+.empty{text-align:center;padding:30px;color:#A7B29C;font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <svg width="36" height="36" viewBox="0 0 48 48" style="border-radius:10px;box-shadow:0 2px 6px rgba(94,112,73,0.25)">
+      <rect width="48" height="48" rx="11" fill="#7E9469"/>
+      <path d="M24 15C20.5 12.8 14.5 12.8 11.8 13.5C11 13.7 10.3 14.4 10.3 15.3V29c0 1 .9 1.7 1.9 1.4C14.8 29.7 20.5 29.7 24 32V15Z" fill="#fff"/>
+      <path d="M24 15C27.5 12.8 33.5 12.8 36.2 13.5C37 13.7 37.7 14.4 37.7 15.3V29c0 1-.9 1.7-1.9 1.4C33.2 29.7 27.5 29.7 24 32V15Z" fill="#EDF2E4"/>
+      <path d="M32 8a10 10 0 019 6" stroke="#D9C286" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+      <path d="M37.5 10.5l3.5 3.5-4.5 1" stroke="#D9C286" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <div><h1>잉글루틴 선생님 페이지</h1><p>학생 계정·교재·학습 결과를 관리하세요</p></div>
+  </div>
+
+  <div id="login" class="login">
+    <h2>🔒 관리자 코드 입력</h2>
+    <input id="code" type="password" placeholder="관리자 코드" onkeydown="if(event.key==='Enter')enter()">
+    <button onclick="enter()">확인</button>
+    <div id="loginErr" class="err"></div>
+  </div>
+
+  <div id="dash" style="display:none">
+    <div class="tabs">
+      <button class="tab on" onclick="tab('students')" id="t-students">👨‍🎓 학생 관리</button>
+      <button class="tab" onclick="tab('books')" id="t-books">📚 교재 관리</button>
+    </div>
+
+    <!-- 학생 관리 -->
+    <div id="tab-students">
+      <div class="card">
+        <h3>➕ 학생 계정 발급</h3>
+        <div class="row">
+          <input id="newName" placeholder="학생 이름">
+          <input id="newPin" class="sm" placeholder="비번4자리" maxlength="4" inputmode="numeric">
+          <button class="btn" onclick="createStudent()">발급</button>
+        </div>
+        <div style="font-size:10.5px;color:#A7B29C;margin-top:6px">💡 이 아이디·비번으로 잉글루틴과 북튜브(집중듣기) 모두 로그인돼요.</div>
+        <div id="newAcc" class="notice"></div>
+        <div id="createErr" class="err"></div>
+      </div>
+      <div class="card">
+        <h3>👨‍🎓 학생 목록 & 결과 입력</h3>
+        <div id="slist" class="slist"><div class="empty">불러오는 중…</div></div>
+        <div style="text-align:center;margin-top:12px"><button class="btn gray" onclick="loadStudents()">🔄 새로고침</button></div>
+      </div>
+    </div>
+
+    <!-- 교재 관리 -->
+    <div id="tab-books" style="display:none">
+      <div class="card">
+        <h3>➕ 교재 추가</h3>
+        <div class="row">
+          <input id="bookName" placeholder="교재 이름 (예: Bricks Reading 100)">
+          <input id="bookDesc" placeholder="설명 (선택)">
+          <button class="btn" onclick="addBook()">추가</button>
+        </div>
+        <div style="font-size:11px;color:#A7B29C;margin-top:8px">💡 교재 이름으로 유튜브 듣기 음원을 자동 검색해요. 정확한 이름일수록 좋아요.</div>
+      </div>
+      <div class="card">
+        <h3>📚 등록된 교재</h3>
+        <div id="booklist" class="booklist"><div class="empty">불러오는 중…</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 결과 입력 모달 -->
+<div id="modal" class="modal">
+  <div class="modal-box">
+    <h3 id="m-name">결과 입력</h3>
+    <div class="msub" id="m-id"></div>
+    <label>날짜</label>
+    <input id="m-date" type="date">
+    <label>교재 / 학습 내용</label>
+    <input id="m-book" placeholder="예: Bricks Reading 100 Unit 3">
+    <label>오늘 한 활동 (완료한 것 체크)</label>
+    <div class="chk-row">
+      <label class="chk"><input type="checkbox" id="m-reading"> 📖 낭독</label>
+      <label class="chk"><input type="checkbox" id="m-writing"> ✍️ 쓰기</label>
+      <label class="chk"><input type="checkbox" id="m-listening"> 🎧 흘려듣기</label>
+    </div>
+    <label>숙제(단어/문법) 점수</label>
+    <input id="m-hw" placeholder="예: 8/10">
+    <label>단어테스트 결과</label>
+    <input id="m-word" placeholder="예: 18/20">
+    <label>메모 (선택)</label>
+    <input id="m-memo" placeholder="예: 발음 아주 좋아요!">
+    <div class="modal-btns">
+      <button class="cancel" onclick="closeModal()">취소</button>
+      <button class="save" onclick="saveRecord()">저장</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let savedCode="", students=[], books=[], curStudent=null;
+
+function enter(){ const c=document.getElementById("code").value.trim(); if(!c)return; savedCode=c; init(); }
+async function init(){
+  try{
+    const r=await fetch("/api/data?action=list&code="+encodeURIComponent(savedCode));
+    if(r.status===401){ document.getElementById("loginErr").textContent="코드가 올바르지 않아요."; return; }
+    const j=await r.json(); if(j.error)throw new Error(j.error);
+    document.getElementById("login").style.display="none";
+    document.getElementById("dash").style.display="block";
+    students=j.students||[]; renderStudents();
+    loadBooks();
+  }catch(e){ document.getElementById("loginErr").textContent="실패: "+e.message; }
+}
+function tab(name){
+  document.getElementById("tab-students").style.display=name==="students"?"block":"none";
+  document.getElementById("tab-books").style.display=name==="books"?"block":"none";
+  document.getElementById("t-students").className="tab"+(name==="students"?" on":"");
+  document.getElementById("t-books").className="tab"+(name==="books"?" on":"");
+}
+
+// 학생
+async function loadStudents(){
+  const r=await fetch("/api/data?action=list&code="+encodeURIComponent(savedCode));
+  const j=await r.json(); students=j.students||[]; renderStudents();
+}
+function renderStudents(){
+  const box=document.getElementById("slist");
+  if(!students.length){ box.innerHTML='<div class="empty">발급된 학생이 없어요. 위에서 계정을 발급하세요.</div>'; return; }
+  const now=new Date(); const pre=now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0");
+  box.innerHTML=students.map(s=>{
+    const recs=s.records||[];
+    const mo=recs.filter(r=>(r.date||"").startsWith(pre));
+    const rC=mo.filter(r=>r.reading).length, wC=mo.filter(r=>r.writing).length, lC=mo.filter(r=>r.listening).length;
+    return `<div class="srow">
+      <div><div class="sname">${esc(s.name)}</div><div class="sid">${esc(s.id)} · ${esc(s.pin)}</div></div>
+      <div class="statmini">이번달 📖${rC} ✍️${wC} 🎧${lC}</div>
+      <div class="act">
+        <button onclick='openModal(${JSON.stringify(s.id)},${JSON.stringify(s.name)})'>+ 결과입력</button>
+        <button class="del" onclick='delStudent(${JSON.stringify(s.id)},${JSON.stringify(s.name)})'>삭제</button>
+      </div>
+    </div>`;
+  }).join("");
+}
+async function createStudent(){
+  const name=document.getElementById("newName").value.trim();
+  const pin=document.getElementById("newPin").value.trim();
+  document.getElementById("createErr").textContent="";
+  if(!name){ document.getElementById("createErr").textContent="이름을 입력하세요."; return; }
+  if(!/^\d{4}$/.test(pin)){ document.getElementById("createErr").textContent="비번은 숫자 4자리로 입력하세요."; return; }
+  const r=await fetch(`/api/data?action=create&code=${encodeURIComponent(savedCode)}&name=${encodeURIComponent(name)}&pin=${encodeURIComponent(pin)}`);
+  const j=await r.json();
+  if(j.error){ document.getElementById("createErr").textContent="발급 실패: "+j.error; return; }
+  const box=document.getElementById("newAcc"); box.className="notice show";
+  box.innerHTML=`✅ 발급 완료! 학생에게 알려주세요 → 아이디 <b>${j.id}</b> · 비밀번호 <b>${j.pin}</b><br><span style="font-size:11px;color:#7A8770">이 아이디로 북튜브 집중듣기도 자동 로그인돼요.</span>`;
+  document.getElementById("newName").value=""; document.getElementById("newPin").value="";
+  loadStudents();
+}
+async function delStudent(id,name){
+  if(!confirm(`'${name}' 학생을 삭제할까요? 기록도 사라져요.`))return;
+  await fetch(`/api/data?action=delete&code=${encodeURIComponent(savedCode)}&id=${encodeURIComponent(id)}`);
+  loadStudents();
+}
+
+// 결과 입력 모달
+function openModal(id,name){
+  curStudent=id;
+  document.getElementById("m-name").textContent=name+" 결과 입력";
+  document.getElementById("m-id").textContent=id;
+  const t=new Date(); document.getElementById("m-date").value=t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0");
+  document.getElementById("m-book").value=""; document.getElementById("m-hw").value="";
+  document.getElementById("m-word").value=""; document.getElementById("m-memo").value="";
+  document.getElementById("m-reading").checked=false;
+  document.getElementById("m-writing").checked=false;
+  document.getElementById("m-listening").checked=false;
+  document.getElementById("modal").className="modal show";
+}
+function closeModal(){ document.getElementById("modal").className="modal"; }
+async function saveRecord(){
+  const p=new URLSearchParams({action:"addrecord",code:savedCode,id:curStudent,
+    date:document.getElementById("m-date").value,
+    book:document.getElementById("m-book").value,
+    hw:document.getElementById("m-hw").value,
+    word:document.getElementById("m-word").value,
+    reading:document.getElementById("m-reading").checked?"1":"0",
+    writing:document.getElementById("m-writing").checked?"1":"0",
+    listening:document.getElementById("m-listening").checked?"1":"0",
+    memo:document.getElementById("m-memo").value});
+  const r=await fetch("/api/data?"+p.toString());
+  const j=await r.json();
+  if(j.error){ alert("저장 실패: "+j.error); return; }
+  closeModal(); loadStudents();
+}
+
+// 교재
+async function loadBooks(){
+  const r=await fetch("/api/data?action=books"); const j=await r.json();
+  books=j.books||[]; renderBooks();
+}
+function renderBooks(){
+  const box=document.getElementById("booklist");
+  if(!books.length){ box.innerHTML='<div class="empty">등록된 교재가 없어요.</div>'; return; }
+  box.innerHTML=books.map((b,i)=>`<div class="bookrow"><div><div class="bn">${esc(b.name)}</div>${b.desc?`<div class="bd">${esc(b.desc)}</div>`:''}</div><button onclick="delBook(${i})">🗑</button></div>`).join("");
+}
+async function addBook(){
+  const name=document.getElementById("bookName").value.trim();
+  const desc=document.getElementById("bookDesc").value.trim();
+  if(!name)return;
+  books.push({name,desc,query:name});
+  await saveBooks();
+  document.getElementById("bookName").value=""; document.getElementById("bookDesc").value="";
+}
+async function delBook(i){
+  if(!confirm(`'${books[i].name}' 교재를 삭제할까요?`))return;
+  books.splice(i,1); await saveBooks();
+}
+async function saveBooks(){
+  const r=await fetch(`/api/data?action=setbooks&code=${encodeURIComponent(savedCode)}&books=${encodeURIComponent(JSON.stringify(books))}`);
+  const j=await r.json();
+  if(j.error){ alert("교재 저장 실패: "+j.error); return; }
+  renderBooks();
+}
+function esc(t){const d=document.createElement("div");d.textContent=t==null?"":t;return d.innerHTML;}
+</script>
+</body>
+</html>
